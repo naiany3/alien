@@ -8,6 +8,9 @@ var gameState = "fight"
 var balas = 30;
 var bala;
 var grupoBala;
+var grupoalien1;
+var grupoalien2;
+var gruponave;
 
 
 function preload(){
@@ -56,6 +59,10 @@ function setup() {
    
   grupoBala = new Group()
 
+  grupoalien1 = new Group()
+  grupoalien2 = new Group()
+  gruponave = new Group()
+
 
 }
 
@@ -85,6 +92,9 @@ function draw() {
     gameState = "lost"
   }
   if(gameState === "fight"){
+    inimigo1()
+    inimigo2()
+    inimigo3()
     if(keyDown("left")){
       player.x = player.x - 5
     }
@@ -112,18 +122,85 @@ function draw() {
       if(balas == 0 ){
         gameState = "bala"
       }
-
+      if(grupoalien1.isTouching(grupoBala)){
+        for(var i =0; i< grupoalien1.length;i++){
+          grupoalien1[i].destroy()
+          grupoBala.destroyEach()
+        }
+      }
+      if(grupoalien2.isTouching(grupoBala)){
+        for(var i =0; i< grupoalien2.length;i++){
+          grupoalien2[i].destroy()
+          grupoBala.destroyEach()
+        }
+      }
+      if(gruponave.isTouching(grupoBala)){
+        for(var i =0; i< gruponave.length;i++){
+          gruponave[i].destroy()
+          grupoBala.destroyEach()
+        }
+      }
 
   }
   //movendo o jogador para cima e para baixo e tornando o jogo compatível com dispositivos móveis usando touches (toques)
+  if(gameState === "bala") {
+    textSize(50)
+    fill("blue")
+    text("voce ficou sem balas<fim de jogo>",400,400)
+    grupoBala.destroyEach()
+    grupoalien1.destroyEach()
+    grupoalien2.destroyEach()
+    gruponave.destroyEach()
+    player.destroyEach()
+  }
 
-  //libere as balas e mude a imagem do personagem para a posição de tiro quando a tecla espaço for pressionada
+    //libere as balas e mude a imagem do personagem para a posição de tiro quando a tecla espaço for pressionada
 
   drawSprites();
+  textSize(20)
+  fill("blue")
+  text("balas: "+balas,200,200)
+
 }
  function inimigo1(){
-  if(frameCount%50===0){
-    alien1 = createSprite(random(500,1000),random(100,300),15,15)
+  if(frameCount%150===0){
+    alien1 = createSprite(random(1450,1500),random(190,300),15,15)
+    alien1.addImage(alien1Img)
+    alien1.scale = 0.5
+    alien1.velocityX = -5
+    alien1.debug = 1;
+    alien1.setCollider("rectangle",0,0,150,100)
+
+    alien1.lifetime = 350
+    grupoalien1.add(alien1)
 
   }
  }
+  function inimigo2(){
+    if(frameCount%210===0){
+      alien2 = createSprite(random(1450,1500),random(550,600),15,15)
+      alien2.addImage(alien2Img)
+      alien2.scale = 0.7
+      alien2.velocityX = -5
+      alien2.debug = true;
+      alien2.setCollider("rectangle",0,0,100,100)
+  
+      alien2.lifetime = 350
+      grupoalien2.add(alien2)
+    }
+   }
+   
+   function inimigo3(){
+    if(frameCount%230===0){
+      nave = createSprite(random(1450,1500),random(400,400),15,15)
+      nave.addImage(naveImg)
+      nave.scale = 0.4
+      nave.velocityX = -5
+      nave.debug = true;
+      nave.setCollider("rectangle",0,0,150,100)
+  
+      nave.lifetime = 350
+      gruponave.add(nave)
+    }
+   }
+   
